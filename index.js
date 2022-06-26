@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import mkdirp from "mkdirp";
-import camelcase from "camelcase";
 
 export default async () => {
   const root = path.join(process.cwd(), "env");
@@ -44,7 +43,7 @@ export default async () => {
   out += `let env = local;`;
   for (const file of files) {
     const name = path.parse(file).name;
-    out += `if (process.env.NODE_ENV === '${name}') env = ${name}`;
+    out += `if (process.env.NODE_ENV === '${name}') env = ${name};`;
   }
   out += `module.exports = env;`;
   fs.writeFileSync(index, out);
