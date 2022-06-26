@@ -12,31 +12,40 @@ export default async () => {
   const lib = path.join(root, "lib");
   mkdirp.sync(lib);
   const local = path.join(lib, "local.js");
-  fs.writeFileSync(local, "export default {}");
+  fs.stat(local, function (err, stat) {
+    if (stat && stat.isFile()) {
+      console.log(`${local}存在`);
+    } else {
+      fs.writeFileSync(local, "export default {}");
+    }
+  });
   const dev = path.join(lib, "dev.js");
-  fs.writeFileSync(dev, "export default {}");
+  fs.stat(dev, function (err, stat) {
+    if (stat && stat.isFile()) {
+      console.log(`${dev}存在`);
+    } else {
+      fs.writeFileSync(dev, "export default {}");
+    }
+  });
   const main = path.join(lib, "main.js");
-  fs.writeFileSync(main, "export default {}");
+  fs.stat(main, function (err, stat) {
+    if (stat && stat.isFile()) {
+      console.log(`${main}存在`);
+    } else {
+      fs.writeFileSync(main, "export default {}");
+    }
+  });
   const files = fs.readdirSync(lib);
-  const out = {};
+  let out = "";
   for (const file of files) {
-    const list = await import(path.join(lib, file));
-    const dic = {};
-    list.default.forEach((item) => {
-      dic["$" + camelcase(item, { pascalCase: true }) + "$"] = path.join(
-        path.parse(file).name,
-        item
-      );
-    });
-    out["$" + camelcase(path.parse(file).name, { pascalCase: true }) + "$"] =
-      dic;
+    const name = path.parse(file).name;
+    out += `import ${name} from './lib/${file}';`;
   }
-  let json = JSON.stringify(out);
-  json = json.replaceAll('$"', "");
-  json = json.replaceAll('"$', "");
-  fs.writeFileSync(
-    index,
-    'import EventEmitter from "events"; export const emitter = new EventEmitter(); export default ' +
-      json
-  );
+  out += `let env = local;`;
+  for (const file of files) {
+    const name = path.parse(file).name;
+    out += `if (process.env.NODE_ENV === '${name}') env = ${name}`;
+  }
+  out += `module.exports = env;`;
+  fs.writeFileSync(index, out);
 };
