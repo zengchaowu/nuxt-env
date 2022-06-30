@@ -1,10 +1,10 @@
 {
   "name": "@doraemon-module/nuxt-env",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "index.js",
   "license": "MIT",
-  "devDependencies": {
-    "camelcase": "^7.0.0",
-    "mkdirp": "^1.0.4"
+  "dependencies": {
+    "@doraemon-module/nuxt-functions": "^1.0.1",
+    "camelcase": "^7.0.0"
   }
 }
