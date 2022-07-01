@@ -4,7 +4,7 @@ import mkdirp from "@doraemon-module/nuxt-functions/lib/mkdirp";
 
 export default async () => {
   const env = mkdirp(path.join(process.cwd(), "env"));
-
+  const lib = mkdirp(path.join(env, "lib"));
   const files = fs.readdirSync(lib);
   let out = "";
   for (const file of files) {
