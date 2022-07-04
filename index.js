@@ -14,7 +14,7 @@ export default async () => {
   out += `let env = local;`;
   for (const file of files) {
     const name = path.parse(file).name;
-    out += `if (process.env.NODE_ENV === '${name}') env = ${name};`;
+    out += `if (process.env.APP_ENV === '${name}') env = ${name};`;
   }
   out += `export default env;`;
   const index = path.join(env, "index.js");
