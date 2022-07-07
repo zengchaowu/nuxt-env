@@ -16,7 +16,7 @@ export default async () => {
     const name = path.parse(file).name;
     out += `if (process.env.APP_ENV === '${name}') env = ${name};`;
   }
-  out += `export default env;`;
+  out += `const out = env; export default out;`;
   const index = path.join(env, "index.js");
   fs.writeFileSync(index, out);
 };
