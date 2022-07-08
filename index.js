@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { exec } from "child_process";
 import mkdirp from "@doraemon-module/nuxt-functions/lib/mkdirp";
 
 export default async () => {
@@ -19,4 +20,5 @@ export default async () => {
   out += `const out = env; export default out;`;
   const index = path.join(env, "index.js");
   fs.writeFileSync(index, out);
+  exec("yarn lintfix");
 };
